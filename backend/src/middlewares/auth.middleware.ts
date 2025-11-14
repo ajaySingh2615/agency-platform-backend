@@ -110,6 +110,6 @@ export function optionalAuth(
     next();
   } catch (error) {
     // If token is invalid, just continue without user
-    next(error);
+    next();
   }
 }
