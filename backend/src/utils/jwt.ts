@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 // Type definitions for JWT payloads
 export interface AccessTokenPayload {
@@ -14,7 +14,8 @@ export interface RefreshTokenPayload {
 // Generate an access token (short-lived, 15 minutes)
 export function generateAccessToken(payload: AccessTokenPayload): string {
   const secret = process.env.ACCESS_TOKEN_SECRET;
-  const expiry = process.env.ACCESS_TOKEN_EXPIRY || "15m";
+  const expiry = (process.env.ACCESS_TOKEN_EXPIRY ||
+    "15m") as SignOptions["expiresIn"];
 
   if (!secret) {
     throw new Error("ACCESS_TOKEN_SECRET is not defined");
@@ -28,9 +29,10 @@ export function generateAccessToken(payload: AccessTokenPayload): string {
 }
 
 // Generate a refresh token (long-lived, 30 days)
-export function generateAccessToken(payload: RefreshTokenPayload): string {
+export function generateRefreshToken(payload: RefreshTokenPayload): string {
   const secret = process.env.REFRESH_TOKEN_SECRET;
-  const expiry = process.env.REFRESH_TOKEN_EXPIRY || "30d";
+  const expiry = (process.env.REFRESH_TOKEN_EXPIRY ||
+    "30d") as SignOptions["expiresIn"];
 
   if (!secret) {
     throw new Error("REFRESH_TOKEN_SECRET is not defined");
