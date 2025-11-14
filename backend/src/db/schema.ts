@@ -1,5 +1,4 @@
 import {
-  PgTable,
   uuid,
   varchar,
   text,
@@ -9,7 +8,6 @@ import {
   pgTable,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
-import { table } from "console";
 
 // 1. Enums (The "allowed values")
 export const userRoleEnum = pgEnum("user_role", [
@@ -27,23 +25,54 @@ export const authProviderEnum = pgEnum("auth_provider", [
   "phone",
 ]);
 
-// core tables
+// CORE TABLES
 
-// table 1: user
+// [TABLE 1: user]
+// This is the central table for a user's identity.
+// It stores *who* the person is and *what* their role is in the app.
+// It does NOT store how they log in.
 export const users = pgTable("users", {
+  // The unique ID for the user. Primary Key.
+
   id: uuid("id").primaryKey().defaultRandom(),
+
+  /**
+   * The user's role.
+   * CRITICAL: This is NULL by default when a user first registers.
+   * Your application logic MUST check:
+   * IF (role IS NULL) THEN redirect user to the "Select Role" screen.
+   */
   role: userRoleEnum("role"),
+
+  /**
+   * The user's full name, e.g., "Ajay Kumar".
+   * Can be pre-filled from Google/Facebook.
+   */
   fullName: varchar("full_name", { length: 255 }),
+
+  /**
+   * A URL to the user's profile picture.
+   * Can be pre-filled from Google/Facebook.
+   */
   profilePictureUrl: text("profile_picture_url"),
+
+  /**
+   * Timestamp for when this user record was first created.
+   */
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+
+  /**
+   * Timestamp that automatically updates whenever this user's row is changed.
+   */
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
 });
 
-// table 2: userAuthIdentities
+// [TABLE 2: userAuthIdentities]
+// Stores *how* a user logs in. This table links multiple authentication methods (e.g., a Google account AND a phone number) to a single 'users' record.
 export const userAuthIdentities = pgTable(
   "user_auth_identities",
   {

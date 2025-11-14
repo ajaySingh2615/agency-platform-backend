@@ -318,7 +318,7 @@ export const userAuthIdentitiesRelations = relations(
 );
 
 /**
- * Relations for the 'userRefreshTokens' table.
+ * Relations for the 'userAuthIdentitiesRelations' table.
  */
 export const userRefreshTokensRelations = relations(
   userRefreshTokens,
