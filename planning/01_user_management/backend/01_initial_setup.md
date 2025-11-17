@@ -1,287 +1,286 @@
-# Module 1: User Management - Initial Setup Guide
+# Step 01: Initial Project Setup
 
-## 📚 **Step 1: Understanding the Architecture**
+## Objective
 
-### Tech Stack
+Create a new Spring Boot project with Java 25 and Maven, configured for professional development.
 
-- **Backend Framework**: Express.js (Node.js)
-- **Database**: PostgreSQL 14+
-- **ORM**: Drizzle ORM
-- **Language**: TypeScript
-- **Authentication**: JWT (Access + Refresh Token Pattern)
-- **Validation**: Zod
-- **Security**: bcrypt, helmet, rate-limiting
+---
 
-### Project Structure
+## Step 1.1: Create Project Using Spring Initializr
+
+### Option A: Using Web Interface (Recommended for beginners)
+
+1. Go to [https://start.spring.io/](https://start.spring.io/)
+2. Configure the project:
+
+   - **Project**: Maven
+   - **Language**: Java
+   - **Spring Boot**: 3.2.0 (or latest stable)
+   - **Group**: `com.createrapp`
+   - **Artifact**: `backend`
+   - **Name**: `CreaterApp`
+   - **Package name**: `com.createrapp`
+   - **Packaging**: Jar
+   - **Java**: 21 (Note: Use 21 for now as 25 support is limited, we'll configure later)
+
+3. Click "Generate" and download the zip file
+4. Extract to `C:\Users\cadt1\Documents\creater-app\backend`
+
+### Option B: Using Command Line (Recommended for advanced users)
+
+Open PowerShell in `C:\Users\cadt1\Documents\creater-app\backend` and run:
+
+```bash
+curl https://start.spring.io/starter.zip ^
+  -d type=maven-project ^
+  -d language=java ^
+  -d bootVersion=3.2.0 ^
+  -d baseDir=. ^
+  -d groupId=com.createrapp ^
+  -d artifactId=backend ^
+  -d name=CreaterApp ^
+  -d packageName=com.createrapp ^
+  -d packaging=jar ^
+  -d javaVersion=21 ^
+  -o project.zip
+
+tar -xf project.zip
+del project.zip
+```
+
+---
+
+## Step 1.2: Verify Java Installation
+
+```bash
+# Check Java version
+java -version
+
+# Should show Java 21 or higher
+# If you have JDK 25, make sure JAVA_HOME is set correctly
+```
+
+Set JAVA_HOME if needed:
+
+```bash
+# Windows PowerShell
+[System.Environment]::SetEnvironmentVariable("JAVA_HOME", "C:\Program Files\Java\jdk-25", "User")
+```
+
+---
+
+## Step 1.3: Verify Maven Installation
+
+```bash
+# Check Maven version
+mvn -version
+
+# Should show Maven 3.9+ and point to correct Java version
+```
+
+---
+
+## Step 1.4: Initial Project Structure
+
+After initialization, you should have:
 
 ```
 backend/
 ├── src/
-│   ├── config/              # Environment & app configuration
-│   ├── db/                  # Database schema, migrations, connection
-│   ├── middleware/          # Express middleware (auth, validation, error)
-│   ├── routes/              # API route definitions
-│   ├── controllers/         # Business logic
-│   ├── services/            # Database operations
-│   ├── utils/               # Helper functions (JWT, hashing, etc.)
-│   ├── validators/          # Zod schemas for request validation
-│   └── app.ts               # Express app setup
-├── drizzle.config.ts        # Drizzle configuration
-├── package.json
-├── tsconfig.json
-└── .env.example
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── createrapp/
+│   │   │           └── CreaterAppApplication.java
+│   │   └── resources/
+│   │       ├── application.properties
+│   │       └── static/
+│   │       └── templates/
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── createrapp/
+│                   └── CreaterAppApplicationTests.java
+├── .gitignore
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── README.md
 ```
 
 ---
 
-## 📦 **Step 2: Required Libraries**
+## Step 1.5: Update pom.xml (Basic Configuration)
 
-### Core Dependencies
+Open `backend/pom.xml` and verify/update:
 
-| Library              | Purpose                   | Security Benefit                                   |
-| -------------------- | ------------------------- | -------------------------------------------------- |
-| `express`            | Web framework             | Industry standard, well-maintained                 |
-| `typescript`         | Type safety               | Prevents type-related bugs                         |
-| `drizzle-orm`        | ORM                       | SQL injection prevention via parameterized queries |
-| `postgres`           | PostgreSQL driver         | Direct connection to database                      |
-| `zod`                | Schema validation         | Input validation & sanitization                    |
-| `bcrypt`             | Password/token hashing    | One-way encryption for sensitive data              |
-| `jsonwebtoken`       | JWT creation/verification | Stateless authentication                           |
-| `dotenv`             | Environment variables     | Keeps secrets out of code                          |
-| `helmet`             | Security headers          | Protection against common web vulnerabilities      |
-| `cors`               | CORS management           | Controlled cross-origin access                     |
-| `express-rate-limit` | Rate limiting             | Prevents brute force attacks                       |
-| `express-validator`  | Additional validation     | Extra layer of input sanitization                  |
-| `morgan`             | HTTP request logger       | Audit trail for debugging                          |
-| `uuid`               | Unique ID generation      | Secure random IDs                                  |
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-### Dev Dependencies
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
 
-| Library                               | Purpose                              |
-| ------------------------------------- | ------------------------------------ |
-| `tsx`                                 | TypeScript execution for development |
-| `@types/node`, `@types/express`, etc. | TypeScript type definitions          |
-| `drizzle-kit`                         | Database migration tool              |
-| `nodemon`                             | Auto-restart on file changes         |
+    <groupId>com.createrapp</groupId>
+    <artifactId>backend</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>CreaterApp Backend</name>
+    <description>User Management Module for Creater App</description>
 
-### Optional But Recommended
+    <properties>
+        <java.version>21</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-- `twilio` or `aws-sns` - For sending OTP SMS
-- `passport` - For OAuth (Google/Facebook)
-- `passport-google-oauth20` - Google OAuth strategy
-- `passport-facebook` - Facebook OAuth strategy
-- `winston` - Advanced logging
+    <!-- Dependencies will be added in next step -->
+    <dependencies>
+        <!-- Spring Boot Starter Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
----
+        <!-- Spring Boot Starter Test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-## 🔐 **Step 3: Security Principles**
-
-### 1. **Never Store Plain Text**
-
-- ❌ Never store plain OTP, passwords, or refresh tokens
-- ✅ Always use bcrypt with salt rounds ≥ 12
-
-### 2. **JWT Best Practices**
-
-- **Access Token**: Short-lived (15 minutes), stored in memory (not localStorage)
-- **Refresh Token**: Long-lived (30 days), httpOnly cookie or secure storage
-- Include only essential data in JWT payload: `userId`, `role`
-
-### 3. **Input Validation**
-
-- Validate EVERY request with Zod schemas
-- Sanitize phone numbers to E.164 format (`+919876543210`)
-- Validate email format for OAuth
-
-### 4. **Rate Limiting**
-
-| Endpoint                     | Limit                       | Reason              |
-| ---------------------------- | --------------------------- | ------------------- |
-| `/api/auth/phone/send-otp`   | 3 requests/hour per phone   | Prevent SMS spam    |
-| `/api/auth/phone/verify-otp` | 5 attempts/15 min per phone | Prevent brute force |
-| `/api/auth/refresh`          | 10 requests/min per IP      | Prevent token abuse |
-| All other routes             | 100 requests/15 min per IP  | General protection  |
-
-### 5. **Database Security**
-
-- Use connection pooling
-- Never expose database errors to client
-- Use transactions for multi-step operations (e.g., creating user + auth identity)
-
----
-
-## 🚀 **Step 4: Development Flow**
-
-### Order of Implementation
-
-1. **Health Check Route** (Verify server is running)
-2. **Database Setup** (Schema, migrations, connection)
-3. **Utilities** (JWT, hashing, error handling)
-4. **Phone Auth** (Send OTP → Verify OTP → Issue Tokens)
-5. **OAuth** (Google/Facebook login)
-6. **Token Management** (Refresh, Logout)
-7. **User Profile** (Get profile, Update profile, Select role)
-
-### Testing Each Step
-
-- Use **Postman** or **Thunder Client** (VS Code extension)
-- Test happy path AND error cases
-- Verify tokens using [jwt.io](https://jwt.io)
-
----
-
-## ⚠️ **Step 5: Common Pitfalls to Avoid**
-
-1. **Token Storage on Client**
-
-   - ❌ Don't store refresh tokens in localStorage (vulnerable to XSS)
-   - ✅ Use httpOnly cookies OR secure mobile storage
-
-2. **OTP Expiry**
-
-   - Set OTPs to expire in 5 minutes
-   - Delete used/expired OTPs from database
-
-3. **Device Limit Logic**
-
-   - Implement in application code, not database constraints
-   - Always delete oldest session when limit reached
-
-4. **Error Messages**
-   - ❌ "Invalid password" (reveals username exists)
-   - ✅ "Invalid credentials" (generic message)
-
----
-
-## 📝 **Step 6: Environment Variables**
-
-You'll need these in your `.env` file:
-
-```env
-# Server
-NODE_ENV=development
-PORT=5000
-
-# Database
-DATABASE_URL=postgresql://username:password@localhost:5432/agency_platform
-
-# JWT Secrets (generate using: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
-ACCESS_TOKEN_SECRET=your_access_token_secret_here
-REFRESH_TOKEN_SECRET=your_refresh_token_secret_here
-
-# JWT Expiry
-ACCESS_TOKEN_EXPIRY=15m
-REFRESH_TOKEN_EXPIRY=30d
-
-# OTP Configuration
-OTP_EXPIRY_MINUTES=5
-
-# OAuth (Get from Google Cloud Console & Facebook Developers)
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
-
-FACEBOOK_APP_ID=your_facebook_app_id
-FACEBOOK_APP_SECRET=your_facebook_app_secret
-FACEBOOK_CALLBACK_URL=http://localhost:5000/api/auth/facebook/callback
-
-# SMS Provider (Example: Twilio)
-TWILIO_ACCOUNT_SID=your_twilio_account_sid
-TWILIO_AUTH_TOKEN=your_twilio_auth_token
-TWILIO_PHONE_NUMBER=your_twilio_phone_number
-
-# CORS
-ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000
-
-# Rate Limiting
-MAX_DEVICE_SESSIONS=2
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
 ```
 
 ---
 
-## 🐳 **Step 7: Docker Setup (PostgreSQL)**
-
-We'll use Docker to run PostgreSQL, which makes setup easier and ensures consistency across environments.
-
-### Prerequisites
-
-- Docker Desktop installed ([Download here](https://www.docker.com/products/docker-desktop))
-- Docker Compose (included with Docker Desktop)
-
-### Quick Start
-
-The `docker-compose.yml` file is included in the backend folder. It configures:
-
-- **PostgreSQL 14** (Alpine Linux - lightweight)
-- **Port**: 5432 (mapped to host)
-- **Credentials**: postgres/postgres (change in production!)
-- **Database**: agency_platform
-- **Data Persistence**: Volume mounted for data persistence
-- **Health Check**: Automatic database health monitoring
-
-### Commands
+## Step 1.6: Verify Build
 
 ```bash
-# Start PostgreSQL in detached mode
-docker-compose up -d
+# Navigate to backend folder
+cd backend
 
-# Check if container is running
-docker-compose ps
+# Clean and compile
+mvn clean compile
 
-# View logs
-docker-compose logs postgres
-
-# Stop PostgreSQL
-docker-compose down
-
-# Stop and remove all data (⚠️ destructive!)
-docker-compose down -v
+# Expected output: BUILD SUCCESS
 ```
 
-### Verify Database is Running
+---
+
+## Step 1.7: Run Initial Application (Smoke Test)
 
 ```bash
-# Option 1: Using docker-compose
-docker-compose ps
-# Should show "healthy" status
+mvn spring-boot:run
+```
 
-# Option 2: Connect with psql
-docker-compose exec postgres psql -U postgres -d agency_platform
-# Type \q to exit
+You should see:
+
+```
+Started CreaterAppApplication in X seconds
+```
+
+Press `Ctrl+C` to stop.
+
+---
+
+## Step 1.8: Create .gitignore (If not present)
+
+Create/update `backend/.gitignore`:
+
+```
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Application
+application-local.properties
+application-secrets.properties
+
+# Other
+.env
 ```
 
 ---
 
-## ✅ **Step 8: Pre-Development Checklist**
+## Step 1.9: IDE Setup (IntelliJ IDEA Recommended)
 
-Before writing code, ensure:
-
-- [ ] Docker Desktop is installed and running
-- [ ] PostgreSQL container is running (`docker-compose up -d`)
-- [ ] Node.js version ≥ 18.x installed
-- [ ] You have a code editor (VS Code recommended)
-- [ ] You understand JWT flow (access + refresh tokens)
-- [ ] You have a plan for SMS provider (Twilio/AWS SNS/other)
-- [ ] You've read through the schema explanation
+1. Open IntelliJ IDEA
+2. File → Open → Select `backend` folder
+3. Wait for Maven to import dependencies
+4. File → Project Structure → Project SDK → Select JDK 21 (or 25)
+5. Enable annotation processing: Settings → Build → Compiler → Annotation Processors → Enable
 
 ---
 
-## 🎯 **Next Steps**
+## Verification Checklist
 
-The following files will guide you through implementation:
+Before moving to the next step, verify:
 
-- `docker-compose.yml` - PostgreSQL Docker configuration (already created!)
-- `02_package_and_config.md` - package.json, tsconfig, and configuration files
-- `03_database_setup.md` - Schema implementation and migrations
-- `04_core_utilities.md` - JWT, hashing, error handling
-- `05_middleware.md` - Auth, validation, error handling middleware
-- `06_health_check.md` - First API route
-- `07_phone_authentication.md` - Phone authentication implementation
-- `08_oauth_implementation.md` - Google/Facebook login
-- `09_token_management.md` - Refresh and logout
-- `10_user_profile.md` - Profile management and role selection
-- `11_testing_guide.md` - How to test everything
+- ✅ Java 21+ installed and configured
+- ✅ Maven 3.9+ installed
+- ✅ Project created with correct package structure
+- ✅ `pom.xml` is valid and builds successfully
+- ✅ Application starts without errors
+- ✅ IDE properly configured and recognizes the project
 
 ---
 
-**Ready to proceed? Start Docker and then move to file 02! 🚀**
+## Troubleshooting
+
+### Issue: Maven command not found
+
+**Solution**: Add Maven to PATH or use the Maven wrapper (`./mvnw` or `mvnw.cmd`)
+
+### Issue: Wrong Java version
+
+**Solution**: Set JAVA_HOME and update PATH to point to JDK 21+
+
+### Issue: Port 8080 already in use
+
+**Solution**: Stop the application using that port or change the port in `application.properties`:
+
+```properties
+server.port=8081
+```
+
+---
+
+## Next Step
+
+✅ **Completed Initial Setup**  
+➡️ Proceed to **[02_PROJECT_STRUCTURE.md](./02_PROJECT_STRUCTURE.md)** to create the complete folder structure.
