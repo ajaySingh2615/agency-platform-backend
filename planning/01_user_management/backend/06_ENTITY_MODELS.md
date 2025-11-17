@@ -142,7 +142,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -159,8 +159,7 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @UuidGenerator  // Modern Hibernate 6.2+ approach (replaces deprecated @GenericGenerator)
     @Column(name = "user_id", updatable = false, nullable = false)
     private UUID userId;
 
@@ -694,7 +693,7 @@ package com.createrapp.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -709,8 +708,7 @@ import java.util.UUID;
 public class UserSession {
 
     @Id
-    @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
+    @UuidGenerator  // Modern Hibernate 6.2+ approach (replaces deprecated @GenericGenerator)
     @Column(name = "session_id", updatable = false, nullable = false)
     private UUID sessionId;
 
