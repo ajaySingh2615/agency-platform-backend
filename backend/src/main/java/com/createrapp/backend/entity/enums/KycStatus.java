@@ -1,4 +1,7 @@
 package com.createrapp.backend.entity.enums;
 
-public class KycStatus {
+public enum KycStatus {
+    PENDING,   // Submitted, awaiting review
+    APPROVED,  // Verified and approved
+    REJECTED   // Rejected with reason
 }

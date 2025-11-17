@@ -1,4 +1,7 @@
 package com.createrapp.backend.entity.enums;
 
-public class SocialProvider {
+public enum SocialProvider {
+    GOOGLE,
+    FACEBOOK,
+    APPLE
 }
