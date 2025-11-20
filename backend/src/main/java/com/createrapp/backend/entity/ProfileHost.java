@@ -47,9 +47,11 @@ public class ProfileHost {
     private String profilePicUrl;
 
     @Column(name = "onboarding_step")
+    @Builder.Default
     private Integer onboardingStep = 0;
 
     @Column(name = "is_verified")
+    @Builder.Default
     private Boolean isVerified = false;
 
     @Column(name = "created_at", nullable = false, updatable = false)

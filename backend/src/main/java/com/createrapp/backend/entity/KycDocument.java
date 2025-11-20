@@ -34,6 +34,7 @@ public class KycDocument {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 50)
+    @Builder.Default
     private KycStatus status = KycStatus.PENDING;
 
     @Column(name = "rejection_reason", columnDefinition = "TEXT")

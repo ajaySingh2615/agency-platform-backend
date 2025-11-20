@@ -52,6 +52,8 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/logout")
+    @Operation(summary = "Logout", description = "Logout from current session")
     public ResponseEntity<ApiResponse> logout(@RequestParam UUID sessionId) {
         authService.logout(sessionId);
         return ResponseEntity.ok(

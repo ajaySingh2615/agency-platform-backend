@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
         // check if phone already exists (if provided)
         if (request.getPhoneNumber() != null &&
-                userRepository.exitsByPhoneNumber(request.getPhoneNumber())) {
+                userRepository.existsByPhoneNumber(request.getPhoneNumber())) {
             throw new DuplicateResourceException("Phone number already registered");
         }
 
@@ -137,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void sentOtp(String phoneNumber) {
+    public void sendOtp(String phoneNumber) {
         // Implementation for sending OTP
         throw new UnsupportedOperationException("OTP sending not yet implemented");
     }

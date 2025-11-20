@@ -24,11 +24,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     // find by email and phone number
     Optional<User> findByEmailOrPhoneNumber(String email, String phoneNumber);
 
-    // check if email exits
+    // check if email exists
     boolean existsByEmail(String email);
 
     // check if phone number exists
-    boolean exitsByPhoneNumber(String phoneNumber);
+    boolean existsByPhoneNumber(String phoneNumber);
 
     // find by account status
     List<User> findByAccountStatus(AccountStatus status);
@@ -64,5 +64,5 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
     // Find users with specific role
     @Query("SELECT DISTINCT u FROM User u JOIN u.userRoles ur WHERE ur.role.roleName = :roleName")
-    List<User> findByRoleName(@Param("roleName") com.createrapp.entity.enums.RoleName roleName);
+    List<User> findByRoleName(@Param("roleName") com.createrapp.backend.entity.enums.RoleName roleName);
 }

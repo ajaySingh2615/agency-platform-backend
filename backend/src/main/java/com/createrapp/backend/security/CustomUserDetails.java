@@ -1,11 +1,11 @@
 package com.createrapp.backend.security;
 
+import com.createrapp.backend.entity.User;
 import com.createrapp.backend.entity.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;

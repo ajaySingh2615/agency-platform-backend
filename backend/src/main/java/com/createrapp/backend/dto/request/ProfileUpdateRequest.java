@@ -1,6 +1,7 @@
 package com.createrapp.backend.dto.request;
 
 import com.createrapp.backend.entity.enums.Gender;
+import com.createrapp.backend.validation.annotation.ValidAge;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class ProfileUpdateRequest {
     private Gender gender;
 
     @Past(message = "Date of birth must be in the past")
+    @ValidAge(minAge = 18, message = "User must be at least 18 years old")
     private LocalDate dob;
 
     private String bio;

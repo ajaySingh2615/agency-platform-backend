@@ -37,13 +37,16 @@ public class User {
     private String passwordHash;
 
     @Column(name = "is_email_verified", nullable = false)
+    @Builder.Default
     private Boolean isEmailVerified = false;
 
     @Column(name = "is_phone_verified", nullable = false)
+    @Builder.Default
     private Boolean isPhoneVerified = false;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "account_status", nullable = false, length = 50)
+    @Builder.Default
     private AccountStatus accountStatus = AccountStatus.PENDING_ONBOARDING;
 
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -57,9 +60,11 @@ public class User {
 
     // Relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<SocialIdentity> socialIdentities = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<UserRole> userRoles = new HashSet<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -75,9 +80,11 @@ public class User {
     private ProfileGifter profileGifter;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<UserSession> sessions = new HashSet<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<KycDocument> kycDocuments = new HashSet<>();
 
     @PrePersist

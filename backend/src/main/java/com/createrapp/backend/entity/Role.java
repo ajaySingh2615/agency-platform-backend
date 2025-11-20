@@ -32,6 +32,7 @@ public class Role {
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<UserRole> userRoles = new HashSet<>();
 
     @PrePersist

@@ -25,12 +25,15 @@ public class ProfileGifter {
     private User user;
 
     @Column(name = "level")
+    @Builder.Default
     private Integer level = 1;
 
     @Column(name = "vip_status")
+    @Builder.Default
     private Boolean vipStatus = false;
 
     @Column(name = "total_spent", precision = 15, scale = 2)
+    @Builder.Default
     private BigDecimal totalSpent = BigDecimal.ZERO;
 
     @Column(name = "created_at", nullable = false, updatable = false)

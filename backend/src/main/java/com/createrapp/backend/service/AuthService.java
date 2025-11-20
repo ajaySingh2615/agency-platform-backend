@@ -27,7 +27,7 @@ public interface AuthService {
     /**
      * Send OTP to phone number
      */
-    void sentOtp(String phoneNumber);
+    void sendOtp(String phoneNumber);
 
     /**
      * Verify OTP

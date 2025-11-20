@@ -42,7 +42,7 @@ public interface UserService {
     /**
      * Suspend user account
      */
-    void suspendedUser(UUID userId, String reason);
+    void suspendUser(UUID userId, String reason);
 
     /**
      * Reactivate suspended account

@@ -1,20 +1,18 @@
 package com.createrapp.backend.validation.annotation;
 
-import com.createrapp.backend.validation.validator.AgeValidator;
+import com.createrapp.backend.validation.validator.PasswordMatchesValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 import java.lang.annotation.*;
 
-@Target({ElementType.FIELD, ElementType.PARAMETER})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = AgeValidator.class)
+@Constraint(validatedBy = PasswordMatchesValidator.class)
 @Documented
-public @interface ValidAge {
+public @interface PasswordMatches {
 
-    String message() default "User must be at least 18 years old";
-
-    int minAge() default 18;
+    String message() default "Passwords do not match";
 
     Class<?>[] groups() default {};
 

@@ -49,7 +49,7 @@ public class SessionServiceImpl implements SessionService {
             List<UserSession> oldestSessions = sessionRepository
                     .findOldestActiveSession(userId, LocalDateTime.now());
             if (!oldestSessions.isEmpty()) {
-                sessionRepository.delete(oldestSessions.getFirst());
+                sessionRepository.delete(oldestSessions.get(0));
                 log.info("Deleted oldest session to make room for new session");
             }
         }
@@ -123,7 +123,7 @@ public class SessionServiceImpl implements SessionService {
                 .deviceInfo(session.getDeviceInfo())
                 .ipAddress(session.getIpAddress())
                 .createdAt(session.getCreatedAt())
-                .expiredAt(session.getExpiresAt())
+                .expiresAt(session.getExpiresAt())
                 .lastAccessedAt(session.getLastAccessedAt())
                 .build();
     }
